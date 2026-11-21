@@ -40,4 +40,9 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(QrisTransaction::class);
     }
+
+    public function merchants(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Merchant::class);
+    }
 }
