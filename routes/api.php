@@ -1,9 +1,11 @@
+
 <?php
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\QrisTransactionController;
 use App\Http\Controllers\Api\MerchantController;
+use App\Http\Controllers\Api\QrisCodeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,9 +15,12 @@ use App\Http\Controllers\Api\MerchantController;
 */
 
 // Mengecek apakah API berjalan
-Route::get('/ping', fn() => [
-    'message' => 'API QRIS Kelompok 4 berjalan'
-]);
+Route::get('/ping', function () {
+    return response()->json([
+        'success' => true,
+        'message' => 'API QRIS Kelompok 4 berjalan',
+    ]);
+});
 
 // Login pengguna
 Route::post('/login', [AuthController::class, 'login']);
@@ -25,7 +30,7 @@ Route::post('/login', [AuthController::class, 'login']);
 |--------------------------------------------------------------------------
 | PROTECTED ROUTES - JWT AUTHENTICATION
 |--------------------------------------------------------------------------
-| Semua endpoint di dalam grup ini membutuhkan token JWT
+| Semua endpoint membutuhkan token JWT
 */
 
 Route::middleware('auth:api')->group(function () {
@@ -40,8 +45,12 @@ Route::middleware('auth:api')->group(function () {
         return response()->json([
             'success' => true,
             'message' => 'Profil pengguna',
-            'data' => auth('api')->user()
-                ->only('id', 'name', 'email', 'role'),
+            'data' => auth('api')->user()->only(
+                'id',
+                'name',
+                'email',
+                'role'
+            ),
         ]);
     });
 
@@ -51,10 +60,34 @@ Route::middleware('auth:api')->group(function () {
     | CRUD MANAJEMEN MERCHANT
     |--------------------------------------------------------------------------
     | Anggota 1
+    | Akses: Admin dan Merchant
     */
 
     Route::middleware('role:admin,merchant')->group(function () {
-        Route::apiResource('merchants', MerchantController::class);
+
+        Route::apiResource(
+            'merchants',
+            MerchantController::class
+        );
+
+    });
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | CRUD QRIS CODES DINAMIS
+    |--------------------------------------------------------------------------
+    | Membuat kode QRIS unik setiap transaksi
+    | Akses: Admin dan Merchant
+    */
+
+    Route::middleware('role:admin,merchant')->group(function () {
+
+        Route::apiResource(
+            'qris-codes',
+            QrisCodeController::class
+        );
+
     });
 
 
@@ -65,13 +98,13 @@ Route::middleware('auth:api')->group(function () {
     | Fitur milik anggota lain
     */
 
-    // GET seluruh transaksi
+    // GET seluruh transaksi QRIS
     Route::get(
         '/qris-transactions',
         [QrisTransactionController::class, 'index']
     );
 
-    // GET detail transaksi
+    // GET detail transaksi QRIS
     Route::get(
         '/qris-transactions/{id}',
         [QrisTransactionController::class, 'show']
@@ -92,14 +125,14 @@ Route::middleware('auth:api')->group(function () {
 
     Route::middleware('role:admin')->group(function () {
 
-        // PUT/PATCH transaksi
+        // PUT / PATCH transaksi QRIS
         Route::match(
             ['put', 'patch'],
             '/qris-transactions/{id}',
             [QrisTransactionController::class, 'update']
         )->whereNumber('id');
 
-        // DELETE transaksi
+        // DELETE transaksi QRIS
         Route::delete(
             '/qris-transactions/{id}',
             [QrisTransactionController::class, 'destroy']
