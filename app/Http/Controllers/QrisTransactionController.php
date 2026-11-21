@@ -18,7 +18,7 @@ class QrisTransactionController extends Controller
     {
         try {
             $transactions = QrisTransaction::query()
-                ->with(['user:id,name,email,role', 'qrisCode:id,merchant_id,qr_type'])
+                ->with(['user:id,name,email,role', 'qrisCode:id,merchant_id,reference_code'])
                 ->select('id', 'user_id', 'qris_code_id', 'reference_number', 'amount', 'status')
                 ->when($request->query('status'), fn($q, $status) => $q->where('status', $status))
                 ->latest('id')
@@ -34,7 +34,7 @@ class QrisTransactionController extends Controller
     public function show(string $id): JsonResponse
     {
         try {
-            $transaction = QrisTransaction::with(['user:id,name,email,role', 'qrisCode:id,merchant_id,qr_type'])
+            $transaction = QrisTransaction::with(['user:id,name,email,role', 'qrisCode:id,merchant_id,reference_code'])
                 ->select('id', 'user_id', 'qris_code_id', 'reference_number', 'amount', 'status')
                 ->find($id);
 

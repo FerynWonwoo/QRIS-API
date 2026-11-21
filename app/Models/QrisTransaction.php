@@ -15,11 +15,17 @@ class QrisTransaction extends Model
         'status',
     ];
 
+    protected $casts = [
+        'amount' => 'decimal:2',
+    ];
+
+    // Relasi ke akun pembayar
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    // Relasi ke kode QRIS
     public function qrisCode(): BelongsTo
     {
         return $this->belongsTo(QrisCode::class);
