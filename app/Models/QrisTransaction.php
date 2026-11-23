@@ -16,6 +16,10 @@ class QrisTransaction extends Model
         'status',
     ];
 
+    protected $casts = [
+        'amount' => 'decimal:2',
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -26,9 +30,8 @@ class QrisTransaction extends Model
         return $this->belongsTo(QrisCode::class);
     }
 
-
     public function settlementTransaction(): HasOne
-{
-    return $this->hasOne(SettlementTransaction::class);
-}
+    {
+        return $this->hasOne(SettlementTransaction::class);
+    }
 }
