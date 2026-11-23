@@ -136,7 +136,7 @@ class SettlementController extends Controller
                 );
             }
 
-            $settlement = DB::transaction(function () use ($data) {
+            $settlement = DB::transaction(function () use ($data, $user) {
 
                 $transactions = QrisTransaction::whereIn(
                     'id',
@@ -193,7 +193,7 @@ class SettlementController extends Controller
                 $totalAmount = $transactions->sum('amount');
 
                 $settlement = Settlement::create([
-                    'user_id' => auth('api')->id(),
+                    'user_id' => $user->id,
                     'merchant_id' => $data['merchant_id'],
                     'batch_code' => 'STL-' . strtoupper(Str::random(12)),
                     'total_amount' => $totalAmount,
