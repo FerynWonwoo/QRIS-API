@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class QrisTransaction extends Model
 {
@@ -24,4 +25,10 @@ class QrisTransaction extends Model
     {
         return $this->belongsTo(QrisCode::class);
     }
+
+
+    public function settlementTransaction(): HasOne
+{
+    return $this->hasOne(SettlementTransaction::class);
+}
 }

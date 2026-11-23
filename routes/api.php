@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\QrisTransactionController;
 use App\Http\Controllers\Api\MerchantController;
+use App\Http\Controllers\SettlementController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,18 +46,42 @@ Route::middleware('auth:api')->group(function () {
         ]);
     });
 
-
-    /*
+        /*
     |--------------------------------------------------------------------------
-    | CRUD MANAJEMEN MERCHANT
+    | CRUD MERCHANT
     |--------------------------------------------------------------------------
-    | Anggota 1
+    | User: Create, Read, Update
+    | Admin: Create, Read, Update, Delete
     */
 
-    Route::middleware('role:admin,merchant')->group(function () {
-        Route::apiResource('merchants', MerchantController::class);
+    Route::apiResource('merchants', MerchantController::class)
+        ->except(['destroy']);
+
+    Route::middleware('role:admin')->group(function () {
+        Route::delete(
+            '/merchants/{merchant}',
+            [MerchantController::class, 'destroy']
+        );
     });
 
+
+/*
+|--------------------------------------------------------------------------
+| CRUD SETTLEMENT
+|--------------------------------------------------------------------------
+| User: Create, Read, Update
+| Admin: Create, Read, Update, Delete
+*/
+
+Route::apiResource('settlements', SettlementController::class)
+    ->except(['destroy']);
+
+Route::middleware('role:admin')->group(function () {
+    Route::delete(
+        '/settlements/{settlement}',
+        [SettlementController::class, 'destroy']
+    );
+});
 
     /*
     |--------------------------------------------------------------------------
@@ -106,5 +131,8 @@ Route::middleware('auth:api')->group(function () {
         )->whereNumber('id');
 
     });
+
+    
+    
 
 });
