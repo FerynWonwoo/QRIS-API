@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\QrisTransactionController;
 use App\Http\Controllers\Api\MerchantController;
 use App\Http\Controllers\SettlementController;
+use App\Http\Controllers\Api\QrisCodeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -64,6 +65,19 @@ Route::middleware('auth:api')->group(function () {
         );
     });
 
+    /*
+|--------------------------------------------------------------------------
+| CRUD QRIS CODE
+|--------------------------------------------------------------------------
+*/
+
+Route::apiResource('qris-codes', QrisCodeController::class)
+    ->except(['destroy']);
+
+Route::delete(
+    '/qris-codes/{qris_code}',
+    [QrisCodeController::class, 'destroy']
+);
 
 /*
 |--------------------------------------------------------------------------
