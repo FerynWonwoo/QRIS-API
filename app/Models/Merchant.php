@@ -23,6 +23,10 @@ class Merchant extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function qrisCodes(): \Illuminate\Database\Eloquent\Relations\HasMany
+{
+    return $this->hasMany(QrisCode::class);
+}
 
     public function settlements(): HasMany
 {

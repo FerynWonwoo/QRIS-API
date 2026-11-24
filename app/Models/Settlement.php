@@ -41,5 +41,4 @@ class Settlement extends Model
         return $this->hasMany(SettlementTransaction::class);
     }
 
-    
 }

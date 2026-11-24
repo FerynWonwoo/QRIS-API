@@ -234,7 +234,6 @@ class SettlementController extends Controller
         }
     }
 
-   
 public function update(Request $request, string $id): JsonResponse
 {
     $user = $request->user('api');
