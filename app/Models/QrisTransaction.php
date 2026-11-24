@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class QrisTransaction extends Model
 {
@@ -19,15 +20,18 @@ class QrisTransaction extends Model
         'amount' => 'decimal:2',
     ];
 
-    // Relasi ke akun pembayar
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    // Relasi ke kode QRIS
     public function qrisCode(): BelongsTo
     {
         return $this->belongsTo(QrisCode::class);
+    }
+
+    public function settlementTransaction(): HasOne
+    {
+        return $this->hasOne(SettlementTransaction::class);
     }
 }
