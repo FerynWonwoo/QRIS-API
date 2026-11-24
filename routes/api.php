@@ -1,3 +1,4 @@
+
 <?php
 
 use Illuminate\Support\Facades\Route;
@@ -53,13 +54,6 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResource('merchants', MerchantController::class)
         ->except(['destroy']);
 
-    Route::middleware('role:admin')->group(function () {
-        Route::delete(
-            '/merchants/{merchant}',
-            [MerchantController::class, 'destroy']
-        );
-    });
-
     /*
     |--------------------------------------------------------------------------
     | CRUD QRIS CODES DINAMIS
@@ -70,13 +64,6 @@ Route::middleware('auth:api')->group(function () {
 
     Route::apiResource('qris-codes', QrisCodeController::class)
         ->except(['destroy']);
-
-    Route::middleware('role:admin')->group(function () {
-        Route::delete(
-            '/qris-codes/{qris_code}',
-            [QrisCodeController::class, 'destroy']
-        );
-    });
 
     /*
     |--------------------------------------------------------------------------
@@ -89,17 +76,12 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResource('settlements', SettlementController::class)
         ->except(['destroy']);
 
-    Route::middleware('role:admin')->group(function () {
-        Route::delete(
-            '/settlements/{settlement}',
-            [SettlementController::class, 'destroy']
-        );
-    });
-
     /*
     |--------------------------------------------------------------------------
     | CRUD TRANSAKSI QRIS
     |--------------------------------------------------------------------------
+    | User: Create, Read, Update
+    | Admin: Create, Read, Update, Delete
     */
 
     Route::get(
@@ -117,19 +99,34 @@ Route::middleware('auth:api')->group(function () {
         [QrisTransactionController::class, 'store']
     );
 
+    Route::match(
+        ['put', 'patch'],
+        '/qris-transactions/{id}',
+        [QrisTransactionController::class, 'update']
+    )->whereNumber('id');
+
     /*
     |--------------------------------------------------------------------------
-    | TRANSAKSI KHUSUS ADMIN - RBAC
+    | DELETE KHUSUS ADMIN - RBAC
     |--------------------------------------------------------------------------
     */
 
     Route::middleware('role:admin')->group(function () {
 
-        Route::match(
-            ['put', 'patch'],
-            '/qris-transactions/{id}',
-            [QrisTransactionController::class, 'update']
-        )->whereNumber('id');
+        Route::delete(
+            '/merchants/{merchant}',
+            [MerchantController::class, 'destroy']
+        );
+
+        Route::delete(
+            '/qris-codes/{qris_code}',
+            [QrisCodeController::class, 'destroy']
+        );
+
+        Route::delete(
+            '/settlements/{settlement}',
+            [SettlementController::class, 'destroy']
+        );
 
         Route::delete(
             '/qris-transactions/{id}',

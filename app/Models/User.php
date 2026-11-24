@@ -49,4 +49,10 @@ class User extends Authenticatable implements JWTSubject
 {
     return $this->hasMany(QrisCode::class);
 }
+
+public function settlements(): HasMany
+{
+    return $this->hasMany(Settlement::class);
+}
+
 }

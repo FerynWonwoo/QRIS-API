@@ -1,0 +1,65 @@
+    INFO KELOMPOK 4 - REST API QRIS
+
+    1. ANGGOTA DAN TABEL
+    Ayudhita Nazwa Fadilla - 255150607111040 - merchants
+    Devina Bilqis Elix Fridona - 255150600111022 - qris_codes
+    Feryn Misvan Yunindra Avrianti - 255150600111016 - qris_transactions
+    Lia Wahyu Ryana - 255150600111015 - settlements
+
+    2. DATABASE
+    Nama database: qris_db
+
+    3. AKUN TESTING (DATABASE SEEDER)
+    Admin: admin@qris.test
+    Password: rahasia123
+    User: user@qris.test
+    Password: rahasia123
+
+    4. ENDPOINT
+    Server: http://127.0.0.1:8000
+    Authorization: Bearer <access_token> (endpoint terlindungi)
+
+    GET /api/ping - Publik
+    POST /api/login - Publik
+    GET /api/me - User dan Admin
+
+    MERCHANTS
+    GET /api/merchants - User dan Admin - Read
+    POST /api/merchants - User dan Admin - Create
+    GET /api/merchants/{id} - User dan Admin - Read detail
+    PUT/PATCH /api/merchants/{id} - User dan Admin - Update
+    DELETE /api/merchants/{id} - Admin - Delete
+
+    QRIS-CODES
+    GET /api/qris-codes - User dan Admin - Read
+    POST /api/qris-codes - User dan Admin - Create
+    GET /api/qris-codes/{id} - User dan Admin - Read detail
+    PUT/PATCH /api/qris-codes/{id} - User dan Admin - Update
+    DELETE /api/qris-codes/{id} - Admin - Delete
+
+    QRIS-TRANSACTIONS
+    GET /api/qris-transactions - User dan Admin - Read
+    POST /api/qris-transactions - User dan Admin - Create
+    GET /api/qris-transactions/{id} - User dan Admin - Read detail
+    PUT/PATCH /api/qris-transactions/{id} - User dan Admin - Update
+    DELETE /api/qris-transactions/{id} - Admin - Delete
+
+    SETTLEMENTS
+    GET /api/settlements - User dan Admin - Read
+    POST /api/settlements - User dan Admin - Create
+    GET /api/settlements/{id} - User dan Admin - Read detail
+    PUT/PATCH /api/settlements/{id} - User dan Admin - Update
+    DELETE /api/settlements/{id} - Admin - Delete
+
+    5. HAK AKSES
+    User: CRU sesuai ownership dan aturan bisnis.
+    Admin: CRUD sesuai aturan bisnis.
+    User hanya dapat mengubah transaksi miliknya menjadi failed sesuai transisi status yang diizinkan. Konfirmasi paid dilakukan admin.
+    QRIS Code merupakan simulasi pembayaran.
+    Tabel pendukung: users dan settlement_transactions.
+
+    6. CARA MENJALANKAN
+    composer install
+    Buat database qris_db dan sesuaikan konfigurasi .env dengan MySQL lokal.
+    php artisan migrate --seed
+    php artisan serve
